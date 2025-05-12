@@ -1,56 +1,67 @@
-import numpy as np
-
-#S0 = input('Enter:')
-#L0 = len(S0)
-
-#temp_memory = {}
-
-#for i in range(L0):
-#    j = S0[i:i+2]
-#    paired_seq.append([j])
-#    if j not in temp_memory:
-#        temp_memory[j] = 1
-#    else:
-#       temp_memory[j] += 1
-
-#most_repeated = max(temp_memory, key=temp_memory.get)
-
-#new_paired_seq = [3 if x = most_repeated else x for x in paired_seq]
-
-#S1 = S0.replace(most_repeated, '3')
-
-#print(S1)
-
-def compress(S, t):
+def pair_frequencies(S):
     L = len(S)
+    freq_of_pairs = {}
+    index_of_pairs = {}
 
-    temp_memory = {}
-
-    for i in range(L):
-        j = S[i:i+2]
-
-        if j not in temp_memory:
-            temp_memory[j] = 1
+    for i in range(L-1):
+        pair = S[i:i+2]
+        if pair not in freq_of_pairs:
+            freq_of_pairs[pair] = 1
+            index_of_pairs[pair] = i
         else:
-            temp_memory[j] += 1
+            freq_of_pairs[pair] += 1
+    return freq_of_pairs, index_of_pairs
 
-    most_repeated = max(temp_memory,key=temp_memory.get)
-    n = str(t+3)
-    S_new = S.replace(most_repeated, n)
-    t += 1
 
-    print(f'most_repeated: {most_repeated}')
-    print(f'S_new: {S_new}')
-    print(f'steps: {t}')
+def tie_break(pair, index_of_pairs):
+    a,b = map(int, list(pair))
+    scale = a+b
+    smallest_digit = min(a,b)
+    first_occurence = index_of_pairs[pair]
+
+    return [scale, smallest_digit, first_occurence]
+
+def selection(freq, index):
     
-    if len(S_new) > 1:
-        return compress(S_new, t)
-    elif len(S_new) == 1:
-        return "STOPPED"
+    max_freq = max(freq.values())
+    candidates = [k for k,v in freq.items() if v == max_freq]
+    
+    if len(candidates) > 1:
+        min_scale = min(tie_break(pair, index)[0] for pair in candidates)
+        candidates = [pair for pair in candidates if tie_break(pair, index)[0] == min_scale]
+        
+    if len(candidates) > 1:
+        min_digit = min(tie_break(pair, index)[1] for pair in candidates)
+        candidates = [pair for pair in candidates if tie_break(pair, index)[1] == min_digit]
+            
+    if len(candidates) != 1:
+        min_first_occurence = min(tie_break(pair,index)[2] for pair in candidates)
+        candidates = [pair for pair in candidates if tie_break(pair,index)[2] == min_first_occurence]
+    
+        most_repeated = candidates[0]
+    else:
+        most_repeated = candidates[0]
+ 
+    return most_repeated
 
-S1 = input("Enter initial sequence: ")
-t = 0
 
-compress(S1, t)
+def compress(S, t=0):
+    while len(S) > 1:
+        freq, index = pair_frequencies(S)
+        most_repeated = selection(freq, index)
+        new_symbol = str(t+3)
+        S = S.replace(most_repeated, new_symbol)
+        t += 1
+
+        print(f"Step {t}; sequence {S}")
+    return t
+
+
+
+S0 = input("Enter initial sequence: ")
+compress(S0)
+
+
+
 
 
