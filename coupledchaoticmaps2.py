@@ -17,8 +17,15 @@ def simulate(p, eps, n, discard):
     return X[discard:], Y[discard:]
 
 # Pearson correlation
+#def correlation(x, y):
+#    return np.corrcoef(x, y)[0, 1]
 def correlation(x, y):
-    return np.corrcoef(x, y)[0, 1]
+    x_mean = np.mean(x)
+    y_mean = np.mean(y)
+    numerator = np.sum((x - x_mean) * (y - y_mean))
+    denominator = np.sqrt(np.sum((x - x_mean)**2)) * np.sqrt(np.sum((y - y_mean)**2))
+    return numerator / denominator if denominator != 0 else 0.0
+
 
 # Histogram-based mutual information
 def mutual_information(x, y, bins=10):
@@ -74,11 +81,13 @@ for idx, eps in enumerate(epsilons):
 # Plot CC, MI, METC vs epsilon
 plt.figure(figsize=(8, 8))
 plt.plot(epsilons, ccs, marker='o', label='Correlation Coef.')
-plt.plot(epsilons, mis, marker='x', label='Mutual Info')
-plt.plot(epsilons, metcs, marker='s', label='METC')
+#plt.plot(epsilons, mis, marker='x', label='Mutual Info')
+#plt.plot(epsilons, metcs, marker='s', label='METC')
 plt.xlabel('Coupling ε')
 plt.ylabel('Measure')
-plt.title('Mean CC, MI, METC vs ε')
+#plt.title('Mean CC, MI, METC vs ε')
+plt.title('Mean CC vs. coupling')
+plt.grid()
 plt.legend()
 plt.tight_layout()
 plt.show()
