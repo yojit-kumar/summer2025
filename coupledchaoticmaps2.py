@@ -2,39 +2,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 import zlib
 
-# 1D tent map definition
-def tent_map(x, p):
-    return np.where(x < p, x / p, (1 - x) / (1 - p))
+def tent_maps(x,p):
+    return np.where(x < p, x/p, (1-x) / (1-p))
 
-# Simulation of master-slave coupled maps
-def simulate(p, eps, n, discard):
-    X = np.zeros(n + discard)
-    Y = np.zeros(n + discard)
+def simulate(p, eps, n):
+    X = np.zeros(n)
+    Y = np.zeros(n)
     X[0], Y[0] = np.random.rand(), np.random.rand()
-    for i in range(1, n + discard):
-        X[i] = tent_map(X[i-1], p)
-        Y[i] = (1 - eps) * tent_map(Y[i-1], p) + eps * tent_map(X[i-1], p)
-    return X[discard:], Y[discard:]
+    for i in range(1, n):
+        X[i] = tent_maps(X[i-1], p)
+        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * tent_maps(X[i-1],p)
+    return X, Y
 
-# Pearson correlation
-#def correlation(x, y):
-#    return np.corrcoef(x, y)[0, 1]
-def correlation(x, y):
-    x_mean = np.mean(x)
-    y_mean = np.mean(y)
-    numerator = np.sum((x - x_mean) * (y - y_mean))
-    denominator = np.sqrt(np.sum((x - x_mean)**2)) * np.sqrt(np.sum((y - y_mean)**2))
-    return numerator / denominator if denominator != 0 else 0.0
+def cc(x,y):
+    x_m = np.mean(x)
+    y_m = np.mean(y)
+    num = np.sum( (x - x_m)*(y - y_m))
+    den = np.sqrt(np.sum((x - x_m)**2)) * np.sqrt(np.sum((y-y_m)**2))
+
+    return num/den if den != 0 else 0.0
 
 
-# Histogram-based mutual information
 def mutual_information(x, y, bins=10):
-    joint, x_edges, y_edges = np.histogram2d(x, y, bins=bins, density=True)
-    px = np.histogram(x, bins=x_edges, density=True)[0]
-    py = np.histogram(y, bins=y_edges, density=True)[0]
-    pxy = joint / joint.sum()
-    px = px / px.sum()
-    py = py / py.sum()
+    joint_dist, x_edges, y_edges = np.histogram2d(x, y, bins=bins)
+    x_dist = np.histogram(x, bins=x_edges)[0]
+    y_dist = np.histogram(y, bins=y_edges)[0]
+    
+    pxy = joint_dist / joint_dist.sum()
+    px = x_dist / x_dist.sum()
+    py = y_dist / y_dist.sum()
+    
     mi = 0.0
     for i in range(len(px)):
         for j in range(len(py)):
@@ -54,35 +51,32 @@ def metc(x, y, bins=16):
     Cxy = len(zlib.compress(bxy))
     return Cx + Cy - Cxy
 
-# Parameters
 p = 0.4999
 epsilons = np.linspace(0, 1, 51)
 trials = 50
 n = 100
-discard = 50
 
-# Allocate arrays
 ccs = np.zeros_like(epsilons)
 mis = np.zeros_like(epsilons)
 metcs = np.zeros_like(epsilons)
 
-# Compute CC, MI, METC vs epsilon
 for idx, eps in enumerate(epsilons):
-    cc_vals, mi_vals, metc_vals = [], [], []
+    cc_vals = []
+    mi_vals = []
+    metc_vals = []
     for _ in range(trials):
-        X, Y = simulate(p, eps, n, discard)
-        cc_vals.append(correlation(X, Y))
+        X, Y = simulate(p, eps, n)
+        cc_vals.append(cc(X,Y))
         mi_vals.append(mutual_information(X, Y, bins=10))
         metc_vals.append(metc(X, Y, bins=16))
     ccs[idx] = np.mean(cc_vals)
     mis[idx] = np.mean(mi_vals)
     metcs[idx] = np.mean(metc_vals)
 
-# Plot CC, MI, METC vs epsilon
 plt.figure(figsize=(8, 8))
 plt.plot(epsilons, ccs, marker='o', label='Correlation Coef.')
 plt.plot(epsilons, mis, marker='x', label='Mutual Info')
-plt.plot(epsilons, metcs, marker='s', label='METC')
+#plt.plot(epsilons, metcs, marker='s', label='METC')
 plt.xlabel('Coupling ε')
 plt.ylabel('Measure')
 plt.title('Mean CC, MI, METC vs ε')
@@ -102,7 +96,7 @@ axes = axes.flatten()
 
 for idx, eps in enumerate(e_values):
     ax = axes[idx]
-    X, Y = simulate(p, eps, n, discard)
+    X, Y = simulate(p, eps, n)
     ax.scatter(X[:-1], X[1:], marker='o', alpha=0.7, label='Xₙ vs Xₙ₊₁')
     ax.scatter(Y[:-1], Y[1:], marker='x', alpha=0.7, label='Yₙ vs Yₙ₊₁')
     ax.set_title(f'ε = {eps}')
