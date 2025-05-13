@@ -57,21 +57,26 @@ def check(S):
     list_of_elem = list(S)
     type_of_elem = []
     for x in list_of_elem:
-        if len(type_of_elem) < 3:
-            if x not in type_of_elem:
-                type_of_elem.append(x)
-        else:
-            print("Check to see if the input sequence has more than two symbols, Please enter the sequence without spaces")
-            break
-    binary_seq = "".join(['0' if x==type_of_elem[0] else '1' for x in list_of_elem])
-    print(f"Converted Sequence: {binary_seq}")
+        if x not in type_of_elem:
+            type_of_elem.append(x)
     
-    return binary_seq
+    if len(type_of_elem) < 3:
+        binary_seq = "".join(['0' if x==type_of_elem[0] else '1' for x in list_of_elem])
+        print(f"Converted Sequence: {binary_seq}")
+    
+        return binary_seq
+    else:
+       print("Check to see if the input sequence has more than two symbols, Please enter the sequence without spaces")
+       return None
+            
 
 
 #function to compress the sequence successivly substituting one kind of pair at a time
 def compress(S, t=0):
     S = check(S)
+    if S is None:
+        return None
+    
     while len(S) > 1:
         freq, index = pair_frequencies(S)
         most_repeated = selection(freq, index)
@@ -87,8 +92,3 @@ def compress(S, t=0):
 S0 = input("Enter initial sequence: ")
 ETC = compress(S0)
 print(f"ETC: {ETC}")
-
-
-
-
-
