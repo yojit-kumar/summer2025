@@ -36,7 +36,7 @@ def mutual_information(x, y, bins=10):
     for i in range(len(px)):
         for j in range(len(py)):
             if pxy[i, j] > 0:
-                mi += pxy[i, j] * np.log(pxy[i, j] / (px[i] * py[j]))
+                mi += pxy[i, j] * np.log2(pxy[i, j] / (px[i] * py[j]))
     return mi
 
 # Simple METC via zlib compression lengths
