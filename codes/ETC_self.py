@@ -110,9 +110,9 @@ def etc(data, num_bins=0, normalized=False, verbose=False):
         else:
             S = data
 
-    S = check(S)
-    if S is None:
-        return None
+    #S = check(S)
+    #if S is None:
+    #    return None
 
     original_length = len(S)
     etc_value = calculate_etc(S, verbose)
