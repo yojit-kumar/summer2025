@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import zlib
+#import zlib
 
 def tent_maps(x,p):
     return np.where(x < p, x/p, (1-x) / (1-p))
@@ -40,16 +40,16 @@ def mutual_information(x, y, bins=10):
     return mi
 
 # Simple METC via zlib compression lengths
-def metc(x, y, bins=16):
-    xq = np.digitize(x, np.linspace(0, 1, bins))
-    yq = np.digitize(y, np.linspace(0, 1, bins))
-    bx = bytes(xq)
-    by = bytes(yq)
-    bxy = bx + by
-    Cx = len(zlib.compress(bx))
-    Cy = len(zlib.compress(by))
-    Cxy = len(zlib.compress(bxy))
-    return Cx + Cy - Cxy
+#def metc(x, y, bins=16):
+#    xq = np.digitize(x, np.linspace(0, 1, bins))
+#    yq = np.digitize(y, np.linspace(0, 1, bins))
+#    bx = bytes(xq)
+#    by = bytes(yq)
+#    bxy = bx + by
+#    Cx = len(zlib.compress(bx))
+#    Cy = len(zlib.compress(by))
+#    Cxy = len(zlib.compress(bxy))
+#    return Cx + Cy - Cxy
 
 p = 0.4999
 epsilons = np.linspace(0, 1, 51)
@@ -58,7 +58,7 @@ n = 100
 
 ccs = np.zeros_like(epsilons)
 mis = np.zeros_like(epsilons)
-metcs = np.zeros_like(epsilons)
+#metcs = np.zeros_like(epsilons)
 
 for idx, eps in enumerate(epsilons):
     cc_vals = []
@@ -68,19 +68,18 @@ for idx, eps in enumerate(epsilons):
         X, Y = simulate(p, eps, n)
         cc_vals.append(cc(X,Y))
         mi_vals.append(mutual_information(X, Y, bins=10))
-        metc_vals.append(metc(X, Y, bins=16))
+#        metc_vals.append(metc(X, Y, bins=16))
     ccs[idx] = np.mean(cc_vals)
     mis[idx] = np.mean(mi_vals)
-    metcs[idx] = np.mean(metc_vals)
+#    metcs[idx] = np.mean(metc_vals)
 
 plt.figure(figsize=(8, 8))
 plt.plot(epsilons, ccs, marker='o', label='Correlation Coef.')
 plt.plot(epsilons, mis, marker='x', label='Mutual Info')
 #plt.plot(epsilons, metcs, marker='s', label='METC')
-plt.xlabel('Coupling ε')
+plt.xlabel('Coupling')
 plt.ylabel('Measure')
-plt.title('Mean CC, MI, METC vs ε')
-plt.title('Mean CC vs. coupling')
+plt.title('Mean CC, MI  vs coupling')
 plt.grid()
 plt.legend()
 plt.tight_layout()
@@ -97,8 +96,8 @@ axes = axes.flatten()
 for idx, eps in enumerate(e_values):
     ax = axes[idx]
     X, Y = simulate(p, eps, n)
-    ax.scatter(X[:-1], X[1:], marker='o', alpha=0.7, label='Xₙ vs Xₙ₊₁')
-    ax.scatter(Y[:-1], Y[1:], marker='x', alpha=0.7, label='Yₙ vs Yₙ₊₁')
+    ax.scatter(X[:-1], X[1:], marker='o', alpha=0.7, label='Xn vs Xn+1')
+    ax.scatter(Y[:-1], Y[1:], marker='x', alpha=0.7, label='Yn vs Yn+1')
     ax.set_title(f'ε = {eps}')
     if idx % cols == 0:
         ax.set_ylabel('Value at n+1')
@@ -110,6 +109,6 @@ for idx, eps in enumerate(e_values):
 for j in range(idx + 1, rows * cols):
     fig.delaxes(axes[j])
 
-fig.suptitle('First-Return Maps for Various ε', y=1.02)
+fig.suptitle('First-Return Maps for Various Couplings', y=1.02)
 plt.tight_layout()
 plt.show()
