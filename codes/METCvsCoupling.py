@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ETC import etc
+#import ETC
+from ETC_self import etc
 
 def tent_maps(x,p):
     return np.where(x < p, x/p, (1-x) / (1-p))
@@ -14,15 +15,26 @@ def simulate(p, eps, n):
         Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * tent_maps(X[i-1],p)
     return X, Y
 
-def metc(x, y, bins=2):
-    Cx = etc(x, num_bins=bins)
-    Cy = etc(y, num_bins=bins)
-    Cxy = etc(x+y, num_bins=bins)
+def metc_self(x, y, bins=10):
+    Cx = etc(x, num_bins=bins, normalized=True)
+    Cy = etc(y, num_bins=bins, normalized=True)
+    Cxy = etc(np.concatenate[x+y], num_bins=bins, normalized=True)
 
     return Cx + Cy - Cxy
 
+def metc(x, y, bins=2):
+    x = ETC.partition(x, n_bins=bins)
+    y = ETC.partition(y, n_bins=bins)
+
+    ETCx = ETC.compute_1D(x, verbose=False).get('ETC1D')
+    ETCy = ETC.compute_1D(y,verbose=False).get('ETC1D')
+    ETCxy = ETC.compute_2D(x,y,verbose=False).get('ETC2D')
+
+    return ETCx + ETCy - ETCxy
+
+
 p = 0.4999
-epsilons = np.linspace(0, 1, 51)
+epsilons = np.linspace(0, 1, 11)
 trials = 50
 n = 100
 
@@ -34,7 +46,7 @@ for idx, eps in enumerate(epsilons):
     metc_vals = []
     for _ in range(trials):
         X, Y = simulate(p, eps, n)
-        metc_vals.append(metc(X, Y, 2))
+        metc_vals.append(metc_self(X, Y))
     metcs[idx] = np.mean(metc_vals)
 
 plt.figure(figsize=(8, 8))
