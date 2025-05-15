@@ -10,7 +10,7 @@ def simulate(p, eps, n):
     X[0], Y[0] = np.random.rand(), np.random.rand()
     for i in range(1, n):
         X[i] = tent_maps(X[i-1], p)
-        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * tent_maps(X[i-1],p)
+        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * X[i-1],p
     return X, Y
 
 def mutual_information(x, y, bins=10):
