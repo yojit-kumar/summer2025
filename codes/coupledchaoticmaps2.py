@@ -98,7 +98,7 @@ for idx, eps in enumerate(e_values):
     X, Y = simulate(p, eps, n)
     ax.scatter(X[:-1], X[1:], marker='o', alpha=0.7, label='Xn vs Xn+1')
     ax.scatter(Y[:-1], Y[1:], marker='x', alpha=0.7, label='Yn vs Yn+1')
-    ax.set_title(f'ε = {eps}')
+    ax.set_title(f'epsilon = {eps}')
     if idx % cols == 0:
         ax.set_ylabel('Value at n+1')
     if idx >= cols * (rows - 1):

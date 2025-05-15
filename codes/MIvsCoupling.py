@@ -37,9 +37,7 @@ n = 100
 mis = np.zeros_like(epsilons)
 
 for idx, eps in enumerate(epsilons):
-    cc_vals = []
     mi_vals = []
-    metc_vals = []
     for _ in range(trials):
         X, Y = simulate(p, eps, n)
         mi_vals.append(mutual_information(X, Y, bins=10))
