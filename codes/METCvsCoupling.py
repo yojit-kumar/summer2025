@@ -12,7 +12,7 @@ def simulate(p, eps, n):
     X[0], Y[0] = np.random.rand(), np.random.rand()
     for i in range(1, n):
         X[i] = tent_maps(X[i-1], p)
-        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * tent_maps(X[i-1],p)
+        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * X[i-1]
     return X, Y
 
 #def metc_self(x, y, bins=10):
@@ -22,7 +22,7 @@ def simulate(p, eps, n):
 
 #    return Cx + Cy - Cxy
 
-def metc(x, y, bins=2):
+def metc(x, y, bins=10):
     x = ETC.partition(x, n_bins=bins)
     y = ETC.partition(y, n_bins=bins)
 
@@ -34,7 +34,7 @@ def metc(x, y, bins=2):
 
 
 p = 0.4999
-epsilons = np.linspace(0, 1, 11)
+epsilons = np.linspace(0, 1, 21)
 trials = 50
 n = 100
 
@@ -46,7 +46,7 @@ for idx, eps in enumerate(epsilons):
     metc_vals = []
     for _ in range(trials):
         X, Y = simulate(p, eps, n)
-        metc_vals.append(metc_self(X, Y))
+        metc_vals.append(metc(X, Y))
     metcs[idx] = np.mean(metc_vals)
 
 plt.figure(figsize=(8, 8))
