@@ -10,7 +10,7 @@ def simulate(p, eps, n):
     X[0], Y[0] = np.random.rand(), np.random.rand()
     for i in range(1, n):
         X[i] = tent_maps(X[i-1], p)
-        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * tent_maps(X[i-1],p)
+        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps *X[i-1]
     return X, Y
 
 def cc(x,y):
@@ -27,7 +27,7 @@ def cc(x,y):
 #    return num/den
 
 p = 0.4999
-epsilons  = np.linspace(0,1,51)
+epsilons  = np.linspace(0,1,21)
 trials = 50
 n = 100
 
