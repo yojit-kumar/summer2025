@@ -1,17 +1,5 @@
 import numpy as np
 
-def partition(X, num_bins=2):
-    X = np.array(X)
-
-    range_x = max(X) - min(X)
-    delta = range_x / num_bins
-
-    symbols = np.floor((X-min(X))/ delta).astype(int)
-
-    symbols = np.clip(symbols, 0, num_bins-1)
-
-    return ''.join(map(str, symbols))
-
 # function to convert the input sequence into pairs and then calculate its frequencies
 def pair_frequencies(S):
     L = len(S)
@@ -66,28 +54,10 @@ def selection(freq, index):
     return most_repeated
 
 
-#Input Checking to validate if algorithm can be run
-def check(S):
-    #Converting if not string
-    if not isinstance(S, str):
-        S = ''.join(map(str, S))
-
-    type_of_elem = set(S)
-    
-    if len(type_of_elem) < 3:
-        if len(type_of_elem) == 1:
-            return S
-        else:
-            binary_seq = "".join(['0' if x==list(type_of_elem)[0] else '1' for x in S])
-        #print(f"Converted Sequence: {binary_seq}")
-        return binary_seq
-    else:
-       print("Check to see if the input sequence has more than two symbols, Please enter the sequence without spaces")
-       return None
 
 #Checking the validity of the input and then converting the into a symbolic sequence 
 def check_and_convert(S, num_bins=0):
-    if num_bins is 0: #sequence already a symbolic sequence
+    if num_bins == 0: #sequence already a symbolic sequence
         if not isinstance(S, str):
             S = ''.join(map(str,S))
 
@@ -98,7 +68,7 @@ def check_and_convert(S, num_bins=0):
                 return S
             else:
                 S = ['0' if x==list(type_of_elem)[0] else '1' for x in S]
-                return S
+                return ''.join(x for x in S)
         else:
             print("If the input has more than two symbols, it needs bins to resolve it. Try using etc(x, num_bins=2)")
             return None
@@ -118,11 +88,10 @@ def check_and_convert(S, num_bins=0):
 
         #return ''.join(map(str, symbols))
         num_bins = 2 #can only take num_bins as 2, otherwise it breaks the tie breaking method scale
-        range_S = max(S) - min(S)
         mean_S = (max(S) + min(S))/2
 
         S = ['0' if x<=mean_S else '1' for x in S]
-        return S        
+        return ''.join(x for x in S)        
         
 
 #function to compress the sequence successivly substituting one kind of pair at a time
@@ -140,18 +109,12 @@ def calculate_etc(S, verbose=False):
     return t
 
 def etc(data, num_bins=0, normalized=False, verbose=False):
-    #if num_bins > 0:
-    #    S = partition(data, num_bins)
-    #else:
-    #    if not isinstance(data, str):
-    #        S = ''.join(map(str, data))
-    #   else:
-    #        S = data
+    S = check_and_convert(data, num_bins)
 
-    #S = check(S)
-    #if S is None:
-    #    return None
-    S = check_and_convert(S)
+    if S is None:
+        print("Problem in check funcion")
+        return None
+
     original_length = len(S)
     etc_value = calculate_etc(S, verbose)
 
@@ -160,16 +123,3 @@ def etc(data, num_bins=0, normalized=False, verbose=False):
         return norm_etc
     else:
         return etc_value
-
-if __name__ == "__main__":
-       # Example with a symbolic sequence
-    test_sequence = "01010011"
-    etc_value, norm_etc = etc(test_sequence, normalized=True, verbose=True)
-    print(f"ETC: {etc_value}")
-    print(f"Normalized ETC: {norm_etc:.4f}")
-    
-    # Example with a time series
-    time_series = np.random.rand(20)  # Random values between 0 and 1
-    etc_value, norm_etc = etc(time_series, num_bins=5, normalized=True, verbose=True)
-    print(f"Time Series ETC: {etc_value}")
-    print(f"Time Series Normalized ETC: {norm_etc:.4f}")
