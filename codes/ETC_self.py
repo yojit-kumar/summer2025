@@ -84,8 +84,46 @@ def check(S):
     else:
        print("Check to see if the input sequence has more than two symbols, Please enter the sequence without spaces")
        return None
-            
 
+#Checking the validity of the input and then converting the into a symbolic sequence 
+def check_and_convert(S, num_bins=0):
+    if num_bins is 0: #sequence already a symbolic sequence
+        if not isinstance(S, str):
+            S = ''.join(map(str,S))
+
+        type_of_elem = set(S)
+
+        if len(type_of_elem) < 3:
+            if len(type_of_elem) == 1:
+                return S
+            else:
+                S = ['0' if x==list(type_of_elem)[0] else '1' for x in S]
+                return S
+        else:
+            print("If the input has more than two symbols, it needs bins to resolve it. Try using etc(x, num_bins=2)")
+            return None
+    
+    else: #num_bins > 0
+        if isinstance(S, str):
+            print('check if the input is valid, more than two types of symbol in a string input')
+            return None
+        
+        S = np.array(S)
+
+        #range_S = max(S) - min(S)
+        #delta = range(S) / num_bins
+    
+        #symbols = np.floor((S-min(S))/ delta).astype(int)
+        #symbols = np.clip(symbols, 0, num_bins-1)
+
+        #return ''.join(map(str, symbols))
+        num_bins = 2 #can only take num_bins as 2, otherwise it breaks the tie breaking method scale
+        range_S = max(S) - min(S)
+        mean_S = (max(S) + min(S))/2
+
+        S = ['0' if x<=mean_S else '1' for x in S]
+        return S        
+        
 
 #function to compress the sequence successivly substituting one kind of pair at a time
 def calculate_etc(S, verbose=False):
@@ -102,18 +140,18 @@ def calculate_etc(S, verbose=False):
     return t
 
 def etc(data, num_bins=0, normalized=False, verbose=False):
-    if num_bins > 0:
-        S = partition(data, num_bins)
-    else:
-        if not isinstance(data, str):
-            S = ''.join(map(str, data))
-        else:
-            S = data
+    #if num_bins > 0:
+    #    S = partition(data, num_bins)
+    #else:
+    #    if not isinstance(data, str):
+    #        S = ''.join(map(str, data))
+    #   else:
+    #        S = data
 
     #S = check(S)
     #if S is None:
     #    return None
-
+    S = check_and_convert(S)
     original_length = len(S)
     etc_value = calculate_etc(S, verbose)
 
