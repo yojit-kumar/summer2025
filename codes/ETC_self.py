@@ -7,7 +7,11 @@ def pair_frequencies(S):
     index_of_pairs = {} #dictionary to hold the first occurence of the pair, to be used in tie-breaking
 
     for i in range(L-1):
+<<<<<<< HEAD
         pair = S[i:i+2]
+=======
+        pair = tuple(S[i:i+2])
+>>>>>>> 255a226 (Adding the replace function, and using tuples instead of lists)
         if pair not in freq_of_pairs:
             freq_of_pairs[pair] = 1
             index_of_pairs[pair] = i
@@ -67,8 +71,13 @@ def check_and_convert(S, num_bins=0):
             if len(type_of_elem) == 1:
                 return S
             else:
+<<<<<<< HEAD
                 S = ['0' if x==list(type_of_elem)[0] else '1' for x in S]
                 return ''.join(x for x in S)
+=======
+                S = [0 if x==list(type_of_elem)[0] else 1 for x in S]
+                return S
+>>>>>>> 255a226 (Adding the replace function, and using tuples instead of lists)
         else:
             print("If the input has more than two symbols, it needs bins to resolve it. Try using etc(x, num_bins=2)")
             return None
@@ -90,8 +99,27 @@ def check_and_convert(S, num_bins=0):
         num_bins = 2 #can only take num_bins as 2, otherwise it breaks the tie breaking method scale
         mean_S = (max(S) + min(S))/2
 
+<<<<<<< HEAD
         S = ['0' if x<=mean_S else '1' for x in S]
         return ''.join(x for x in S)        
+=======
+        S = [0 if x<=mean_S else 1 for x in S]
+        return S
+
+
+#function to substitute the new symbol
+def replace(S, most_repeated, new_symbol):
+    S_new=[]
+    i = 0
+    while i < len(S):
+        if tuple(S[i:i+2]) == most_repeated:
+            S_new.append(new_symbol)
+            i+=2
+        else:
+            S_new.append(S[i])
+            i+=1
+    return S_new
+>>>>>>> 255a226 (Adding the replace function, and using tuples instead of lists)
         
 
 #function to compress the sequence successivly substituting one kind of pair at a time
