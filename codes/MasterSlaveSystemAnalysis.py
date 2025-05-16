@@ -48,66 +48,63 @@ def metc(x, y, bins=10):
 
     return ETCx + ETCy - ETCxy
 
-p = 0.4999
-epsilons  = np.linspace(0,1,21)
-trials = 50
-n = 100
+if __name__ == '__main__':
+    p = 0.4999
+    epsilons  = np.linspace(0,1,21)
+    trials = 50
+    n = 100
 
-ccs = np.zeros_like(epsilons)
-mis = np.zeros_like(epsilons)
-metcs = np.zeros_like(epsilons)
+    ccs = np.zeros_like(epsilons)
+    mis = np.zeros_like(epsilons)
+    metcs = np.zeros_like(epsilons)
 
-for idx, eps in enumerate(epsilons):
-    cc_vals = []
-    mi_vals = []
-    metc_vals = []
+    for idx, eps in enumerate(epsilons):
+        cc_vals = []
+        mi_vals = []
+        metc_vals = []
 
-    for _ in range(trials):
+        for _ in range(trials):
+            X, Y = simulate(p, eps, n)
+            cc_vals.append(correlation_coeffcient(X,Y))
+            mi_vals.append(mutual_information(X,Y))
+            metc_vals.append(metc(X,Y))
+
+        ccs[idx] = np.mean(cc_vals)
+        mis[idx] = np.mean(mi_vals)
+        metcs[idx] = np.mean(metc_vals)
+
+    plt.figure(figsize=(8,8))
+    plt.plot(epsilons, ccs, marker = 'o', label='Correlation Coef')
+    plt.plot(epsilons, mis, marker = 'x', label='Mutual Information')
+    plt.plot(epsilons, metcs, marker = 's', label='Mutual Effort-To-Compress Ratio')
+    plt.xlabel('Coupling')
+    plt.ylabel('Measures')
+    plt.title('Mean CC, MI and METC vs. Coupling')
+    plt.grid()
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+    # First-return subplots for different epsilon values
+    # Plot X[n] vs X[n+1] and Y[n] vs Y[n+1] in each subplot
+    e_values = [0.0, 0.2, 0.4, 0.41, 0.45, 0.5, 0.8, 1.0]
+    cols = 4
+    rows = int(np.ceil(len(e_values) / cols))
+    fig, axes = plt.subplots(rows, cols, figsize=(12, 6), sharex=True, sharey=True)
+    axes = axes.flatten()
+
+    for idx, eps in enumerate(e_values):
+        ax = axes[idx]
         X, Y = simulate(p, eps, n)
-        cc_vals.append(correlation_coeffcient(X,Y))
-        mi_vals.append(mutual_information(X,Y))
-        metc_vals.append(metc(X,Y))
+        ax.scatter(X[:-1], X[1:], marker='o', alpha=0.7, label='Xn vs Xn+1')
+        ax.scatter(Y[:-1], Y[1:], marker='x', alpha=0.7, label='Yn vs Yn+1')
+        ax.set_title(f'epsilon = {eps}')
+        if idx % cols == 0:
+            ax.set_ylabel('Value at n+1')
+        if idx >= cols * (rows - 1):
+            ax.set_xlabel('Value at n')
+        ax.legend(fontsize='small')
 
-    ccs[idx] = np.mean(cc_vals)
-    mis[idx] = np.mean(mi_vals)
-    metcs[idx] = np.mean(metc_vals)
-
-plt.figure(figsize=(8,8))
-plt.plot(epsilons, ccs, marker = 'o', label='Correlation Coef')
-plt.plot(epsilons, mis, marker = 'x', label='Mutual Information')
-plt.plot(epsilons, metcs, marker = 's', label='Mutual Effort-To-Compress Ratio')
-plt.xlabel('Coupling')
-plt.ylabel('Measures')
-plt.title('Mean CC, MI and METC vs. Coupling')
-plt.grid()
-plt.legend()
-plt.tight_layout()
-plt.show()
-
-# First-return subplots for different epsilon values
-# Plot X[n] vs X[n+1] and Y[n] vs Y[n+1] in each subplot
-e_values = [0.0, 0.2, 0.4, 0.41, 0.45, 0.5, 0.8, 1.0]
-cols = 4
-rows = int(np.ceil(len(e_values) / cols))
-fig, axes = plt.subplots(rows, cols, figsize=(12, 6), sharex=True, sharey=True)
-axes = axes.flatten()
-
-for idx, eps in enumerate(e_values):
-    ax = axes[idx]
-    X, Y = simulate(p, eps, n)
-    ax.scatter(X[:-1], X[1:], marker='o', alpha=0.7, label='Xn vs Xn+1')
-    ax.scatter(Y[:-1], Y[1:], marker='x', alpha=0.7, label='Yn vs Yn+1')
-    ax.set_title(f'epsilon = {eps}')
-    if idx % cols == 0:
-        ax.set_ylabel('Value at n+1')
-    if idx >= cols * (rows - 1):
-        ax.set_xlabel('Value at n')
-    ax.legend(fontsize='small')
-
-# Hide any unused subplots
-for j in range(idx + 1, rows * cols):
-    fig.delaxes(axes[j])
-
-fig.suptitle('First-Return Maps for Various Couplings', y=1.02)
-plt.tight_layout()
-plt.show()
+    fig.suptitle('First-Return Maps for Various Couplings', y=1.02)
+    plt.tight_layout()
+    plt.show()
