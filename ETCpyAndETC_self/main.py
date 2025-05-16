@@ -9,7 +9,7 @@ def generate(length):
 
     return list
 
-length = np.arange(5,500,20)
+length = np.arange(5,10000,500)
 trials = 100
 
 myETC_mean = []
