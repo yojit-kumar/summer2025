@@ -59,7 +59,7 @@ def selection(freq, index):
 def check_and_convert(S, num_bins=0):
     if num_bins == 0: #sequence already a symbolic sequence
         if not isinstance(S, str):
-            S = ''.join(map(str,S))
+            S = str(S)
 
         type_of_elem = set(S)
 
@@ -115,7 +115,7 @@ def calculate_etc(S, verbose=False):
         freq, index = pair_frequencies(S)
         most_repeated = selection(freq, index)
         new_symbol = str(t+2)
-        S = S.replace(most_repeated, new_symbol)
+        S = replace(S, most_repeated, new_symbol)
         t += 1 #counting iterations
         
         if verbose:
