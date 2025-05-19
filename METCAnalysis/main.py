@@ -19,9 +19,9 @@ def metc(x, y, bins=2):
     x = ETC.partition(x, n_bins=bins)
     y = ETC.partition(y, n_bins=bins)
 
-    ETCx = ETC.compute_1D(x, verbose=False).get('NETC1D')
-    ETCy = ETC.compute_1D(y,verbose=False).get('NETC1D')
-    ETCxy = ETC.compute_2D(x,y,verbose=False).get('NETC2D')
+    ETCx = ETC.compute_1D(x, verbose=False).get('NETC1D',0)
+    ETCy = ETC.compute_1D(y,verbose=False).get('NETC1D',0)
+    ETCxy = ETC.compute_2D(x,y,verbose=False).get('NETC2D',0)
 
     return ETCx + ETCy - ETCxy
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     epsilons  = np.linspace(0,1,21)
     trials = 50
     n = 100
-    bins=2
+    bins=10
     
     delay = [0,1,2,5]
 
@@ -72,6 +72,7 @@ if __name__ == "__main__":
             ax.set_xlabel('coupling')
 
     fig.suptitle('Mutual ETC v/s Coupling for various delay levels')
+    plt.legend()
     plt.tight_layout()
     plt.show()
 
