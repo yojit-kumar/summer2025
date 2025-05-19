@@ -58,19 +58,24 @@ def check_and_convert(S, num_bins=0):
     symbol_scales = {}
 
     if num_bins == 0: #sequence already a symbolic sequence
-        if not isinstance(S, str):
-            S = str(S)
+        if isinstance(S, str):
+            type_of_elem = set(S)
+            for sym in type_of_elem:
+                if sym.isdigit():
+                    symbol_scales[int(sym)] = 1
+                else:
+                    symbol_scales[sym] = 1
+            S = [int(x) if x.isdigit() else x for x in S]
+        
+        else:
+            S = np.array(S)
+            S = [str(x) for x in S]
 
-        type_of_elem = set(S)
-
-        for sym in type_of_elem:
-            if sym.isdigit():
-                symbol_scales[int(sym)] = 1
-            else:
+            for sym in set(S):
                 symbol_scales[sym] = 1
 
-        S = [int(x) if x.isdigit() else x for x in S]
-
+            S = [int(x) if x.isdigit() else x for x in S]
+            
         return S, symbol_scales
 
 #        if len(type_of_elem) < 3:
@@ -86,7 +91,7 @@ def check_and_convert(S, num_bins=0):
     else: #num_bins > 0
         if isinstance(S, str):
             print('check if the input is valid, more than two types of symbol in a string input')
-            return None
+            return None, None
         
         S = np.array(S)
 
@@ -95,15 +100,14 @@ def check_and_convert(S, num_bins=0):
 
         S_new = []
         for x in S:
-            if max(S) == min(S):
+            if range_S == 0:
                 bin_idx = 0
             else:
                 bin_idx = min( int( (x - min(S)) / delta), num_bins - 1 )
             S_new.append(bin_idx)
 
         for i in range(num_bins):
-            symbol_scales[i] = 1
-        
+            symbol_scales[i] = 1  
 
         return S_new, symbol_scales
     
