@@ -9,8 +9,9 @@ def generate(length):
 
     return list
 
-length = np.arange(5,10000,500)
-trials = 100
+length = np.arange(500,10000,500)
+trials = 10
+bins = 50
 
 myETC_mean = []
 ETCpy_mean = []
@@ -21,8 +22,8 @@ for n in length:
 
     for _ in range(trials):
         seq = generate(n)
-        myETC_vals.append(etc(seq, num_bins=2, normalized=False))
-        seq = ETC.partition(seq, n_bins=2)
+        myETC_vals.append(etc(seq, num_bins=bins, normalized=False))
+        seq = ETC.partition(seq, n_bins=bins)
         ETCpy_vals.append(ETC.compute_1D(seq).get('ETC1D'))
 
     myETC_mean.append(np.mean(myETC_vals))
