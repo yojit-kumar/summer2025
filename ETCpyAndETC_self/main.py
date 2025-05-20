@@ -9,9 +9,9 @@ def generate(length):
 
     return list
 
-length = np.arange(500,10000,500)
-trials = 10
-bins = 50
+length = np.arange(100,1000,100)
+trials = 50
+bins = 2
 
 myETC_mean = []
 ETCpy_mean = []
