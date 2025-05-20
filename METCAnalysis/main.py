@@ -36,8 +36,8 @@ if __name__ == "__main__":
     p = 0.4999
     epsilons  = np.linspace(0,1,21)
     trials = 50
-    n = 100
-    bins=10
+    n = 1000
+    bins=2
     
     delay = [0,1,2,5]
 
@@ -57,7 +57,7 @@ if __name__ == "__main__":
             metc_self_vals = []
             for _ in range(trials):
                 X, Y = simulate(p, eps, n, delay=d)
-                metc_vals.append(metc(X,Y, bins=bins))
+                metc_vals.append(metc(X,Y,bins=bins))
                 metc_self_vals.append(metc_self(X,Y,bins=bins))
             metcs[idx2] = np.mean(metc_vals)
             metc_selfs[idx2] = np.mean(metc_self_vals)
