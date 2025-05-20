@@ -20,8 +20,8 @@ def metc(x, y, bins=2):
     y = ETC.partition(y, n_bins=bins)
 
     ETCx = ETC.compute_1D(x, verbose=False).get('NETC1D',0)
-    ETCy = ETC.compute_1D(y,verbose=False).get('NETC1D',0)
-    ETCxy = ETC.compute_2D(x,y,verbose=False).get('NETC2D',0)
+    ETCy = ETC.compute_1D(y,verbose=False).get('NETC1D')
+    ETCxy = ETC.compute_1D(np.concatenate((x,y),axis=None),verbose=False).get('NETC1D')
 
     return ETCx + ETCy - ETCxy
 
@@ -36,8 +36,8 @@ if __name__ == "__main__":
     p = 0.4999
     epsilons  = np.linspace(0,1,21)
     trials = 50
-    n = 1000
-    bins=2
+    n = 500
+    bins=20
     
     delay = [0,1,2,5]
 
@@ -57,8 +57,8 @@ if __name__ == "__main__":
             metc_self_vals = []
             for _ in range(trials):
                 X, Y = simulate(p, eps, n, delay=d)
-                metc_vals.append(metc(X,Y,bins=bins))
                 metc_self_vals.append(metc_self(X,Y,bins=bins))
+                metc_vals.append(metc(X,Y,bins=bins))
             metcs[idx2] = np.mean(metc_vals)
             metc_selfs[idx2] = np.mean(metc_self_vals)
 
