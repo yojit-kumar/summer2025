@@ -18,10 +18,10 @@ def mutual_information(x, y, bins=25):
     x_dist = np.histogram(x, bins=x_edges)[0]
     y_dist = np.histogram(y, bins=y_edges)[0]
     
-    pxy = joint_dist / joint_dist.sum()
-    px = x_dist / x_dist.sum()
-    py = y_dist / y_dist.sum()
-    
+    pxy = joint_dist / np.sum(joint_dist)
+    px = x_dist / np.sum(x_dist)
+    py = y_dist / np.sum(y_dist)
+
     mi = 0.0
     for i in range(len(px)):
         for j in range(len(py)):
@@ -31,9 +31,9 @@ def mutual_information(x, y, bins=25):
 
 if __name__ == "__main__":
     p = 0.4999
-    epsilons  = np.linspace(0,1,51)
+    epsilons  = np.linspace(0,1,21)
     trials = 50
-    n = 1000
+    n = 100
     
     delay = [0,1,2,5]
 
