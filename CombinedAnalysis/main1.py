@@ -78,8 +78,8 @@ def mutual_etc(X, Y, bins=2):
 
 
 if __name__ == '__main__':
-    for p in [0.4999,0.4,0.2,0.1]:
-        for bins in [2,5,8,16]:
+    for p in [0.4,0.2,0.1]:
+        for bins in [2,5,8]:
             for n in [100, 1000, 10000]:
 
                 #p = 0.4999
