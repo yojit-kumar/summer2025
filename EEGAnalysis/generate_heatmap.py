@@ -4,7 +4,7 @@ import numpy as np
 #import seaborn as sns
 
 
-df = pd.read_csv("EEGAnalysis_results2.csv")
+df = pd.read_csv("etc_for_individual_channels.csv")
 
 df['delta'] = df['Difference EO - EC']
 
@@ -51,5 +51,5 @@ for ch, (x,y) in electrode_coords.items():
 plt.xticks([])
 plt.yticks([])
 plt.tight_layout()
-plt.savefig("plot1.png")
+plt.savefig("electrode_heatmap.png")
 plt.show()

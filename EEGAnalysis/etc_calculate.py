@@ -35,7 +35,6 @@ def process_data(volunteer_ids, channel_ids, root_dir='/home/user/eeg-motor-move
                 'channel': ch,
                 'ETC for EyesOpen': etc_1,
                 'ETC for EyesClosed': etc_2,
-                'Difference EO - EC': etc_1 - etc_2
                 })
 
     return pd.DataFrame(results)
@@ -48,15 +47,7 @@ def etc_func(signal):
 
 if __name__ == '__main__':
 
-    volunteers=[]
-    for n in range(1,110):
-        if len(str(n)) == 1:
-            S = 'S00'+f'{n}'
-        elif len(str(n)) == 2:
-            S = 'S0'+f'{n}'
-        else:
-            S = 'S'+f'{n}'
-        volunteers.append(S)
+    volunteers = [f"S{n:03d}" for n in range(1, 110)]
 
 
     channels = ['Fc5.', 'Fc3.', 'Fc1.', 'Fcz.', 'Fc2.', 'Fc4.', 'Fc6.', 
@@ -74,6 +65,6 @@ if __name__ == '__main__':
     
 
     df = process_data(volunteers, channels)
-    df.to_csv("EEGAnalysis_results2.csv", index=False)
+    df.to_csv("etc_for_individual_channels.csv", index=False)
 
     print(df)
