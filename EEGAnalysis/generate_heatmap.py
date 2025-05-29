@@ -6,7 +6,7 @@ import numpy as np
 
 df = pd.read_csv("etc_for_individual_channels.csv")
 
-df['delta'] = df['Difference EO - EC']
+df['delta'] = df['ETC for EyesOpen'] - df['ETC for EyesClosed']
 
 avg_delta = df.groupby('channel')['delta'].mean()
 
