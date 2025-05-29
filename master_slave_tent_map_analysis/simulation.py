@@ -7,11 +7,15 @@ def simulate(p, eps, n, delay=1):
     X = np.zeros(n)
     Y = np.zeros(n)
 
-    X[0], Y[0] = np.random.rand(), np.random.rand()
-    for i in range(1, n):
+    rng = np.random.default_rng(7)
+
+    X[0], Y[0] = rng.random(), rng.random()
+
+    for i in range(1, n + 100):
         X[i] = tent_maps(X[i-1], p)
         Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * X[i-delay]
-    return X, Y
+    
+    return X[100:], Y[100:]
 
 if __name__=="__main__":
     p = 0.4999

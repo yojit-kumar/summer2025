@@ -1,27 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import ETC
+
 from ETC_self import *
-
-def tent_maps(x,p):
-    return np.where(x < p, x/p, (1-x) / (1-p))
-
-def simulate(p, eps, n, delay=1):
-    X = np.zeros(n)
-    Y = np.zeros(n)
-    X[0], Y[0] = np.random.rand(), np.random.rand()
-    for i in range(1, n):
-        X[i] = tent_maps(X[i-1], p)
-        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * X[i-delay]
-    return X, Y
+from simulation import simulate
 
 def metc(x, y, bins=2):
     x = ETC.partition(x, n_bins=bins)
     y = ETC.partition(y, n_bins=bins)
 
-    ETCx = ETC.compute_1D(x, verbose=False).get('NETC1D',0)
-    ETCy = ETC.compute_1D(y,verbose=False).get('NETC1D')
-    ETCxy = ETC.compute_1D(np.concatenate((x,y),axis=None),verbose=False).get('NETC1D')
+    ETCx = ETC.compute_1D(x, verbose=False).get('NETC1D')
+    ETCy = ETC.compute_1D(y, verbose=False).get('NETC1D')
+    ETCxy = ETC.compute_2D(x, y, verbose=False).get('NETC2D')
 
     return ETCx + ETCy - ETCxy
 
@@ -34,10 +24,10 @@ def metc_self(x, y, bins=2, normalized=True, verbose=False):
 
 if __name__ == "__main__":
     p = 0.4999
-    epsilons  = np.linspace(0,1,21)
-    trials = 1
+    epsilons  = np.linspace(0,1,51)
+    trials = 50
     n = 100
-    bins=5
+    bins=2
     
     delay = [0,1,2,3]
 
@@ -74,6 +64,6 @@ if __name__ == "__main__":
     fig.suptitle('Mutual ETC v/s Coupling for various delay levels')
     plt.legend()
     plt.tight_layout()
-    plt.savefig('please.png')
+    plt.savefig(f'metc_analysis/METC_vs_coupling_n{n}_b{bins}')
     plt.show()
 

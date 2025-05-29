@@ -6,10 +6,11 @@ from simulation import simulate
 def cc(x,y):
     x_m = np.mean(x)
     y_m = np.mean(y)
-    num = np.sum( (x - x_m)*(y - y_m))
-    den = np.sqrt(np.sum((x - x_m)**2)) * np.sqrt(np.sum((y-y_m)**2))
+    
+    numerator = np.sum( (x - x_m)*(y - y_m))
+    denominator = np.sqrt(np.sum((x - x_m)**2)) * np.sqrt(np.sum((y-y_m)**2))
 
-    return num/den if den != 0 else 0.0
+    return numerator/denominator if denominator != 0 else 0.0
 
 if __name__ == "__main__":
     p = 0.4999
@@ -46,5 +47,5 @@ if __name__ == "__main__":
 
     fig.suptitle('Correlation Coefficient v/s Coupling for various delay levels')
     plt.tight_layout()
-    plt.savefig(f'cc_analysis/cc_vs_coupling_n{n}')
+    plt.savefig(f'combined_analysis/cc_analysis/cc_vs_coupling_n{n}')
     plt.show()
