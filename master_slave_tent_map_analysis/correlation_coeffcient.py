@@ -47,5 +47,5 @@ if __name__ == "__main__":
 
     fig.suptitle('Correlation Coefficient v/s Coupling for various delay levels')
     plt.tight_layout()
-    plt.savefig(f'combined_analysis/cc_analysis/cc_vs_coupling_n{n}')
+    plt.savefig(f'plots/combined_analysis/cc_analysis/cc_vs_coupling_n{n}')
     plt.show()

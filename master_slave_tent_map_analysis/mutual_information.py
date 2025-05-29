@@ -55,6 +55,6 @@ if __name__ == "__main__":
 
     fig.suptitle('Mutual Information v/s Coupling for various delay levels')
     plt.tight_layout()
-    plt.savefig(f'mi_analysis/mi_vs_coupling_n{n}_b{bins}')
+    plt.savefig(f'plots/mi_analysis/mi_vs_coupling_n{n}_b{bins}')
     plt.show()
 

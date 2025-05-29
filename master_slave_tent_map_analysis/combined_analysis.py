@@ -70,5 +70,5 @@ if __name__ == '__main__':
                 fig.suptitle('Mean CC, MI, METC vs. Coupling for different delay')
                 plt.legend()
                 plt.tight_layout()
-                plt.savefig(f'p{p}_n{n}_b{bins}.png')
+                plt.savefig(f'plots/combined_analysis/p{p}_n{n}_b{bins}.png')
               #  plt.show()

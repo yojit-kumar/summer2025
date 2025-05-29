@@ -64,6 +64,6 @@ if __name__ == "__main__":
     fig.suptitle('Mutual ETC v/s Coupling for various delay levels')
     plt.legend()
     plt.tight_layout()
-    plt.savefig(f'metc_analysis/METC_vs_coupling_n{n}_b{bins}')
+    plt.savefig(f'plots/metc_analysis/METC_vs_coupling_n{n}_b{bins}')
     plt.show()
 
