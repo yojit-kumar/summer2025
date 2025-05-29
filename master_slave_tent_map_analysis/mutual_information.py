@@ -1,19 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def tent_maps(x,p):
-    return np.where(x < p, x/p, (1-x) / (1-p))
+from simulation import simulate
 
-def simulate(p, eps, n, delay=1):
-    X = np.zeros(n)
-    Y = np.zeros(n)
-    X[0], Y[0] = np.random.rand(), np.random.rand()
-    for i in range(1, n):
-        X[i] = tent_maps(X[i-1], p)
-        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * X[i-delay]
-    return X, Y
-
-def mutual_information(x, y, bins=25):
+def mi(x, y, bins=16):
     joint_dist, x_edges, y_edges = np.histogram2d(x, y, bins=bins)
     x_dist = np.histogram(x, bins=x_edges)[0]
     y_dist = np.histogram(y, bins=y_edges)[0]
@@ -22,18 +12,19 @@ def mutual_information(x, y, bins=25):
     px = x_dist / np.sum(x_dist)
     py = y_dist / np.sum(y_dist)
 
-    mi = 0.0
+    value = 0.0
     for i in range(len(px)):
         for j in range(len(py)):
             if pxy[i, j] > 0:
-                mi += pxy[i, j] * np.log2(pxy[i, j] / (px[i] * py[j]))
-    return mi
+                value += pxy[i, j] * np.log2(pxy[i, j] / (px[i] * py[j]))
+    return value
 
 if __name__ == "__main__":
     p = 0.4999
-    epsilons  = np.linspace(0,1,21)
+    epsilons  = np.linspace(0,1,51)
     trials = 50
     n = 100
+    bins = 8
     
     delay = [0,1,2,5]
 
@@ -51,7 +42,7 @@ if __name__ == "__main__":
             mi_vals = []
             for _ in range(trials):
                 X, Y = simulate(p, eps, n, delay=d)
-                mi_vals.append(mutual_information(X,Y))
+                mi_vals.append(mi(X,Y))
             mis[idx2] = np.mean(mi_vals)
 
         ax.plot(epsilons, mis, alpha=0.7, color='red')
@@ -64,5 +55,6 @@ if __name__ == "__main__":
 
     fig.suptitle('Mutual Information v/s Coupling for various delay levels')
     plt.tight_layout()
+    plt.savefig(f'mi_analysis/mi_vs_coupling_n{n}_b{bins}')
     plt.show()
 

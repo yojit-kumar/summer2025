@@ -1,17 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def tent_maps(x,p):
-    return np.where(x < p, x/p, (1-x) / (1-p))
-
-def simulate(p, eps, n, delay=1):
-    X = np.zeros(n)
-    Y = np.zeros(n)
-    X[0], Y[0] = np.random.rand(), np.random.rand()
-    for i in range(1, n):
-        X[i] = tent_maps(X[i-1], p)
-        Y[i] = (1 - eps) * tent_maps(Y[i-1], p) + eps * X[i-delay]
-    return X, Y
+from simulation import simulate
 
 def cc(x,y):
     x_m = np.mean(x)
@@ -25,7 +15,7 @@ if __name__ == "__main__":
     p = 0.4999
     epsilons  = np.linspace(0,1,51)
     trials = 50
-    n = 1000
+    n = 100
     
     delay = [0,1,2,5]
 
@@ -56,4 +46,5 @@ if __name__ == "__main__":
 
     fig.suptitle('Correlation Coefficient v/s Coupling for various delay levels')
     plt.tight_layout()
+    plt.savefig(f'cc_analysis/cc_vs_coupling_n{n}')
     plt.show()
