@@ -35,11 +35,11 @@ def metc_self(x, y, bins=2, normalized=True, verbose=False):
 if __name__ == "__main__":
     p = 0.4999
     epsilons  = np.linspace(0,1,21)
-    trials = 50
-    n = 500
-    bins=20
+    trials = 1
+    n = 100
+    bins=5
     
-    delay = [0,1,2,5]
+    delay = [0,1,2,3]
 
     cols=4
     rows = int(np.ceil(len(delay)/cols))
@@ -74,5 +74,6 @@ if __name__ == "__main__":
     fig.suptitle('Mutual ETC v/s Coupling for various delay levels')
     plt.legend()
     plt.tight_layout()
+    plt.savefig('please.png')
     plt.show()
 

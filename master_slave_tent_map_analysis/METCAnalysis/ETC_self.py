@@ -78,15 +78,6 @@ def check_and_convert(S, num_bins=0):
             
         return S, symbol_scales
 
-#        if len(type_of_elem) < 3:
-#            if len(type_of_elem) == 1:
-#                return S
-#            else:
-#                S = [0 if x==list(type_of_elem)[0] else 1 for x in S]
-#                return S
-#        else:
-#            print("If the input has more than two symbols, it needs bins to resolve it. Try using etc(x, num_bins=2)")
-#            return None
     
     else: #num_bins > 0
         if isinstance(S, str):
@@ -111,11 +102,6 @@ def check_and_convert(S, num_bins=0):
 
         return S_new, symbol_scales
     
-#        num_bins = 2 #can only take num_bins as 2, otherwise it breaks the tie breaking method scale
-#        mean_S = (max(S) + min(S))/2
-#
-#        S = [0 if x<=mean_S else 1 for x in S]
-#        return S
 
 
 #function to substitute the new symbol
