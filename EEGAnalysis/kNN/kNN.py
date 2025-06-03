@@ -2,10 +2,11 @@ import os
 import numpy as np
 import pandas as pd
 
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import KFold
+
 
 
 
@@ -51,49 +52,38 @@ choice = input('choice (default=n): ')
 
 def training(choice='n'):
     if choice == 'y':
-        n_estimator = [1,10,100,1000,10000]
         BESTF1 = 0
-        FOLD_NO=5
-        KF = KFold(n_splits= FOLD_NO, random_state=42, shuffle=True)
-        print(KF)
-
-
-        for NEST in n_estimator:
-                        
-            for MD in range(1,11):
-
-
-                FSCORE_TEMP=[]
+        FOLD_NO = 5
+        KF = KFold(n_splits= FOLD_NO, random_state=42, shuffle=True)  
+        KF.get_n_splits(X_train_norm) 
+        print(KF) 
+        for K in np.arange(1, 6, 2):
+            FSCORE_TEMP=[]
             
-                for TRAIN_INDEX, VAL_INDEX in KF.split(X_train_norm):
-                    
-                    X_TRAIN, X_VAL = X_train_norm[TRAIN_INDEX], X_train_norm[VAL_INDEX]
-                    Y_TRAIN, Y_VAL = Y_train[TRAIN_INDEX], Y_train[VAL_INDEX]
+            for TRAIN_INDEX, VAL_INDEX in KF.split(X_train_norm):
                 
-                    
-                    clf = RandomForestClassifier( n_estimators = NEST, max_depth = MD, random_state=7)
-                    clf.fit(X_TRAIN, Y_TRAIN.ravel())
-                    Y_PRED = clf.predict(X_VAL)
-                    f1 = f1_score(Y_VAL, Y_PRED, average='macro')
-                    FSCORE_TEMP.append(f1)
-                    print('F1 Score', f1)
-                print("Mean F1-Score for N-EST = ", NEST," MD = ", MD," is  = ",  np.mean(FSCORE_TEMP)  )
-                if(np.mean(FSCORE_TEMP) > BESTF1):
-                    BESTF1 = np.mean(FSCORE_TEMP)
-                    BESTNEST = NEST
-                    BESTMD = MD
-                    
+                X_TRAIN, X_VAL = X_train_norm[TRAIN_INDEX], X_train_norm[VAL_INDEX]
+                Y_TRAIN, Y_VAL = Y_train[TRAIN_INDEX], Y_train[VAL_INDEX]
+            
 
+                clf = KNeighborsClassifier(n_neighbors = K)
+                clf.fit(X_TRAIN, Y_TRAIN.ravel())
+                Y_PRED = clf.predict(X_VAL)
+                f1 = f1_score(Y_VAL, Y_PRED, average='macro')
+                FSCORE_TEMP.append(f1)
+                print('F1 Score', f1)
+            print("Mean F1-Score for K = ", K," is  = ",  np.mean(FSCORE_TEMP)  )
+            if(np.mean(FSCORE_TEMP) > BESTF1):
+                BESTF1 = np.mean(FSCORE_TEMP)
+                BESTK = K
+                
         print("BEST F1SCORE", BESTF1)
-        print("BEST MD = ", BESTMD)
-        print("BEST NEST = ", BESTNEST)
-
-
+        print("BEST K = ", BESTK)
 
 
         print("Saving Hyperparameter Tuning Results")
            
-  
+          
         PATH = os.getcwd()
         RESULT_PATH = PATH + '/SA-TUNING/RESULTS/'
 
@@ -105,33 +95,33 @@ def training(choice='n'):
         else:
             print ("Successfully created the result directory %s" % RESULT_PATH)
 
-        np.save(RESULT_PATH+"/h_NEST.npy", np.array([BESTNEST]) ) 
-        np.save(RESULT_PATH+"/h_MD.npy", np.array([BESTMD]) ) 
-        np.save(RESULT_PATH+"/h_F1SCORE.npy", np.array([BESTF1]) ) 
+        np.save(RESULT_PATH+"/h_K.npy", np.array([BESTK]) ) 
+        np.save(RESULT_PATH+"/h_F1SCORE.npy", np.array([BESTF1]) )
+
 
     elif choice != 'n' and choice != '':
         print('Please choose a valid input')
         exit()
+      
 
-training(choice)
+training(choice=choice)
 
 #Testing
 PATH = os.getcwd()
 RESULT_PATH = PATH + '/SA-TUNING/RESULTS/' 
     
 
-NEST = np.load(RESULT_PATH+"/h_NEST.npy")[0]
-MD = np.load(RESULT_PATH+"/h_MD.npy")[0]
+K = np.load(RESULT_PATH+"/h_K.npy")[0]
 F1SCORE = np.load(RESULT_PATH+"/h_F1SCORE.npy")[0]
-
-clf = RandomForestClassifier( n_estimators = NEST, max_depth = MD, random_state=42)
+clf = KNeighborsClassifier(n_neighbors = K)
 clf.fit(X_train_norm, Y_train.ravel())
 
 
 Y_pred = clf.predict(X_test_norm)
 f1 = f1_score(Y_test, Y_pred, average='macro')
 
-print('TRAINING F1 Score = ', F1SCORE)
-print('TESTING F1 Score = ', f1)
 
+print('Training F1 Score = ', F1SCORE)
+print('Testing F1 Score = ', f1)
+    
 np.save(RESULT_PATH+"/F1SCORE_TEST.npy", np.array([f1]) )

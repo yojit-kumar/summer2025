@@ -2,9 +2,9 @@ import os
 import numpy as np
 import pandas as pd
 
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.model_selection import KFold
 
 
@@ -51,45 +51,39 @@ choice = input('choice (default=n): ')
 
 def training(choice='n'):
     if choice == 'y':
-        clf = DecisionTreeClassifier(random_state=42)
-        ccp_path = clf.cost_complexity_pruning_path(X_train, Y_train)
-        alpha = ccp_path['ccp_alphas']
+        n_estimator = [1, 10, 50, 100, 500, 1000, 5000, 10000]
         BESTF1 = 0
         FOLD_NO = 5
         KF = KFold(n_splits= FOLD_NO, random_state=42, shuffle=True)  
         KF.get_n_splits(X_train_norm) 
         print(KF) 
-        for MSL in range(1,11):
+        for NEST in n_estimator:
+            
                         
-            for MD in range(1,11):
-                
-                for CCP in alpha:
+            FSCORE_TEMP=[]
 
-                    FSCORE_TEMP=[]
+            for TRAIN_INDEX, VAL_INDEX in KF.split(X_train_norm):
                 
-                    for TRAIN_INDEX, VAL_INDEX in KF.split(X_train_norm):
-                        
-                        X_TRAIN, X_VAL = X_train_norm[TRAIN_INDEX], X_train_norm[VAL_INDEX]
-                        Y_TRAIN, Y_VAL = Y_train[TRAIN_INDEX], Y_train[VAL_INDEX]
-                    
-                        
-                        clf = DecisionTreeClassifier(min_samples_leaf = MSL, random_state=42, max_depth = MD, ccp_alpha = CCP)
-                        clf.fit(X_TRAIN, Y_TRAIN.ravel())
-                        Y_PRED = clf.predict(X_VAL)
-                        f1 = f1_score(Y_VAL, Y_PRED, average='macro')
-                        FSCORE_TEMP.append(f1)
-                        print('F1 Score', f1)
-                    print("Mean F1-Score for MSL = ", MSL," MD = ", MD," CCP = ", CCP," is  = ",  np.mean(FSCORE_TEMP)  )
-                    if(np.mean(FSCORE_TEMP) > BESTF1):
-                        BESTF1 = np.mean(FSCORE_TEMP)
-                        BESTMSL = MSL
-                        BESTMD = MD
-                        BESTCCP = CCP
+                X_TRAIN, X_VAL = X_train_norm[TRAIN_INDEX], X_train_norm[VAL_INDEX]
+                Y_TRAIN, Y_VAL = Y_train[TRAIN_INDEX], Y_train[VAL_INDEX]
+            
+                
+                clf = AdaBoostClassifier(n_estimators=NEST, random_state=42)
+                clf.fit(X_TRAIN, Y_TRAIN.ravel())
+                Y_PRED = clf.predict(X_VAL)
+                f1 = f1_score(Y_VAL, Y_PRED, average='macro')
+                FSCORE_TEMP.append(f1)
+                print('F1 Score', f1)
+            print("Mean F1-Score for N-EST = ", NEST," is  = ",  np.mean(FSCORE_TEMP)  )
+            if(np.mean(FSCORE_TEMP) > BESTF1):
+                BESTF1 = np.mean(FSCORE_TEMP)
+                BESTNEST = NEST
+                
                 
         print("BEST F1SCORE", BESTF1)
-        print("BEST MD = ", BESTMD)
-        print("BEST MSL = ", BESTMSL)
-        print("BEST CCP = ", BESTCCP)
+        print("BEST NEST = ", BESTNEST)
+
+
 
 
         print("Saving Hyperparameter Tuning Results")
@@ -106,30 +100,25 @@ def training(choice='n'):
         else:
             print ("Successfully created the result directory %s" % RESULT_PATH)
 
-        np.save(RESULT_PATH+"/h_MSL.npy", np.array([BESTMSL]) ) 
-        np.save(RESULT_PATH+"/h_MD.npy", np.array([BESTMD]) ) 
-        np.save(RESULT_PATH+"/h_CCP.npy", np.array([BESTCCP]) ) 
+        np.save(RESULT_PATH+"/h_NEST.npy", np.array([BESTNEST]) ) 
         np.save(RESULT_PATH+"/h_F1SCORE.npy", np.array([BESTF1]) )
 
     elif choice != 'n' and choice != '':
         print('Please choose a valid input')
         exit()
 
-training(choice)
+training(choice=choice)
 
 #Testing
-
 PATH = os.getcwd()
 RESULT_PATH = PATH + '/SA-TUNING/RESULTS/' 
     
 
-MSL = np.load(RESULT_PATH+"/h_MSL.npy")[0]
-MD = np.load(RESULT_PATH+"/h_MD.npy")[0]
-CCP = np.load(RESULT_PATH+"/h_CCP.npy")[0]
+NEST = np.load(RESULT_PATH+"/h_NEST.npy")[0]
 F1SCORE = np.load(RESULT_PATH+"/h_F1SCORE.npy")[0]
 
 
-clf = DecisionTreeClassifier(min_samples_leaf = MSL, random_state = 42, max_depth = MD, ccp_alpha = CCP)
+clf = AdaBoostClassifier(n_estimators = NEST, random_state=42)
 clf.fit(X_train_norm, Y_train.ravel())
 
 
@@ -142,3 +131,4 @@ print('TESTING F1 Score', f1)
 
 
 np.save(RESULT_PATH+"/F1SCORE_TEST.npy", np.array([f1]) )
+
