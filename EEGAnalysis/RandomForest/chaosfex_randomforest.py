@@ -65,7 +65,7 @@ training(choice)
 
 #Testing
 PATH = os.getcwd()
-RESULT_PATH = PATH + '/CFX TUNING/RESULTS/' 
+RESULT_PATH = PATH + '/CFX-TUNING/RESULTS/' 
    
 INA = np.load(RESULT_PATH+"/h_Q.npy")[0]
 EPSILON_1 = np.load(RESULT_PATH+"/h_EPS.npy")[0]
