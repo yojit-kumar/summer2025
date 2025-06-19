@@ -57,9 +57,9 @@ choice = input('choice (default=n): ')
 def training(choice='n'):
     if choice == 'y':        
         FOLD_NO=5
-        INITIAL_NEURAL_ACTIVITY = [0.13, 0.08, 0.930, 0.810, 0.21, 0.20, 0.080, 0.340] #np.arange(0.01, 0.99, 0.01)
-        DISCRIMINATION_THRESHOLD = [0.499, 0.25, 0.490, 0.14, 0.969, 0.70, 0.060] #np.arange(0.01, 0.99, 0.01)
-        EPSILON = [0.485, 0.233, 0.159, 0.003, 0.238, 0.17, 0.178] #np.arange(0.001,0.5000,0.001)
+        INITIAL_NEURAL_ACTIVITY = [0.08]#[0.13, 0.08, 0.930, 0.810, 0.21, 0.20, 0.080, 0.340] #np.arange(0.01, 0.99, 0.01)
+        DISCRIMINATION_THRESHOLD = [0.159]#[0.499, 0.25, 0.490, 0.14, 0.969, 0.70, 0.060] #np.arange(0.01, 0.99, 0.01)
+        EPSILON = [0.06]#[0.485, 0.233, 0.159, 0.003, 0.238, 0.17, 0.178] #np.arange(0.001,0.5000,0.001)
         k_cross_validation(FOLD_NO, X_train_norm, Y_train, X_test_norm, Y_test, INITIAL_NEURAL_ACTIVITY, DISCRIMINATION_THRESHOLD, EPSILON)
     elif choice != 'n' and choice != '':
         print('Please choose a valid input')

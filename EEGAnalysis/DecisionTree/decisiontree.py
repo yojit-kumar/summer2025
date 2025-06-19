@@ -38,8 +38,8 @@ for v in volunteers:
         Y.append([1])  # Eyes closed
 X = np.array(X)
 Y = np.array(Y)
-
-
+print(len(X))
+print(len(X[0]))
 
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)

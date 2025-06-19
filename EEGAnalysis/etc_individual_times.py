@@ -53,7 +53,7 @@ def process_data(volunteer_ids, root_dir):
         array1=[]
         array2=[]
 
-        for ch in channel_ids:
+        for ch in labels:
             idx = label_idx[ch]
             signal1 = r1_data[idx,:]
             signal2 = r2_data[idx,:]

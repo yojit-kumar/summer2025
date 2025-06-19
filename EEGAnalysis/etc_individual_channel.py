@@ -88,7 +88,7 @@ def process_data(volunteer_ids, channel_ids, root_dir):
 
 
 def etc_func(signal):
-    seq = ETC.partition(signal, n_bins=2)
+    seq = ETC.partition(signal, n_bins=4)
     res = ETC.compute_1D(seq, verbose=False).get('NETC1D')
 
     return res
@@ -115,6 +115,6 @@ if __name__ == '__main__':
 
  
     df = process_data(volunteers, channels, root_dir)
-    df.to_csv("etc_for_individual_channels_filtered.csv", index=False)
+    df.to_csv("etc_for_individual_channels_bins4.csv", index=False)
 
     print(df)

@@ -9,7 +9,7 @@ from sklearn.model_selection import KFold
 
 
 
-FILE = '/etc_for_individual_channels_filtered.csv'
+FILE = '/etc_individual_channels_ordinal_patterns.csv'
 SEQ_LENGTH = 64
 
 
@@ -26,8 +26,8 @@ Y = []
 for v in volunteers:
     subdf = df[df['volunteer'] == v]
 
-    etc_open = subdf['ETC for EyesOpen']
-    etc_closed = subdf['ETC for EyesClosed']
+    etc_open = subdf['ETC_EyesOpen']
+    etc_closed = subdf['ETC_EyesClosed']
 
     if len(etc_open) == SEQ_LENGTH and len(etc_closed) == SEQ_LENGTH:
         X.append(etc_open)
