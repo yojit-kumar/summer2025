@@ -4,9 +4,9 @@ import numpy as np
 #import seaborn as sns
 
 
-df = pd.read_csv("etc_for_individual_channels_filtered.csv")
+df = pd.read_csv("etc_individual_channels_ordinal_patterns.csv")
 
-df['delta'] = df['ETC for EyesOpen'] - df['ETC for EyesClosed']
+df['delta'] = df['ETC_EyesOpen'] - df['ETC_EyesClosed']
 
 avg_delta = df.groupby('channel')['delta'].mean()
 print(avg_delta)

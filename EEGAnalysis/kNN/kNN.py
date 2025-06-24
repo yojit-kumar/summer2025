@@ -61,7 +61,7 @@ def training(choice='n'):
         KF = KFold(n_splits= FOLD_NO, random_state=42, shuffle=True)  
         KF.get_n_splits(X_train_norm) 
         print(KF) 
-        for K in np.arange(1, 6, 2):
+        for K in np.arange(1, 10, 2):
             FSCORE_TEMP=[]
             
             for TRAIN_INDEX, VAL_INDEX in KF.split(X_train_norm):

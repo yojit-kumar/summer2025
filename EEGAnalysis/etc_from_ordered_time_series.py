@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 ROOT_DIR = '/home/user/eeg-motor-movementimagery-dataset-1.0.0/files/'
 ALPHA_BAND = (8.0, 12.0)
 NOTCH_FREQ = 60.0
-TIME_WINDOW = 3 
+TIME_WINDOW = 5 
+DELAY = 2
 
 # EEG Channel definitions
 ALL_CHANNELS = [
@@ -69,11 +70,13 @@ def ordinal_patterns(pattern_to_symbol, ts, m):
     n = len(ts)
        
     symbols = []
-    for i in range(n - m + 1):
+    i = 0
+    while i < n - m:
         window = ts[i:i+m]
         ordinal_pattern = tuple(np.argsort(window))
         symbol = pattern_to_symbol[ordinal_pattern]
         symbols.append(symbol)
+        i += DELAY 
     
     return symbols
 
@@ -196,7 +199,7 @@ def main():
     # channels = OCCIPITAL_CHANNELS  
     # channels = ['AFz']
     
-    output_filename = "etc_individual_channels_ordinal_patterns.csv"
+    output_filename = f"etc_individual_channels_ordinal_patterns_timewindow{TIME_WINDOW}_delay{DELAY}.csv"
     
     try:
         # Process all data
