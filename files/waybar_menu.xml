@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE menu PUBLIC "-//Hyprland//DTD Menu 4.0//EN" "menu-4.0.dtd">
+<menu xmlns="http://www.hyp.com/menu4.0" xmlns:menu="http://www.hyp.com/menu4.0">
+  <!-- Section 1: Left Section -->
+  <menuitem label="Left Section" priority="0" image="avatar.png"/>
+  <menuitem label="System" priority="1" image="avatar.png"/>
+  <menuitem label="Options" priority="2" image="options.png"/>
+  <menuitem label="Advanced" priority="3" image="advanced.png"/>
+  <menuitem label="Quit" priority="4" image="quit.png"/>
+
+  <!-- Section 2: Right Section -->
+  <menuitem label="App Shortcuts" priority="0" image="shortcut.png"/>
+  <menuitem label="App Menu" priority="1" image="appmenu.png"/>
+  <menuitem label="Settings" priority="2" image="settings.png"/>
+  <menuitem label="Custom" priority="3" image="custom.png"/>
+  <menuitem label="System Settings" priority="4" image="systemsettings.png"/>
+
+  <!-- Section 3: Bottom Section -->
+  <menuitem label="Hardware" priority="0" image="hardware.png"/>
+  <menuitem label="CPU Usage" priority="1" image="cpuusage.png"/>
+  <menuitem label="GPU Usage" priority="2" image="gputracker.png"/>
+  <menuitem label="RAM Usage" priority="3" image="ramusage.png"/>
+  <menuitem label="Storage" priority="4" image="storagetool.png"/>
+  <menuitem label="Screen Capture" priority="5" image="screenscreen.png"/>
+  <menuitem label="Screen Recording" priority="6" image="screenscreencapture.png"/>
+  <menuitem label="Hypr Picker" priority="7" image="hyprpicker.png"/>
+  <menuitem label="Screenshot Folder" priority="8" image="screenshotfolder.png"/>
+  <menuitem label="Screen Recorder Folder" priority="9" image="screenrecordingfolder.png"/>
+</menu>
