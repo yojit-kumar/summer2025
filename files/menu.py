@@ -137,16 +137,29 @@ class GruvboxMenu:
     def setup_window(self):
         self.window = Gtk.Window()
         self.window.set_decorated(False)
-        self.window.set_type_hint(Gdk.WindowTypeHint.POPUP_MENU)
+        
+        # Fix for Wayland - use NORMAL window type instead of POPUP_MENU
+        self.window.set_type_hint(Gdk.WindowTypeHint.NORMAL)
+        
+        # Alternative approach for Wayland compatibility
         self.window.set_skip_taskbar_hint(True)
         self.window.set_skip_pager_hint(True)
         self.window.set_keep_above(True)
+        
+        # Set window to be on top of all other windows
+        self.window.set_accept_focus(True)
+        
+        # Set size
         self.window.set_default_size(350, 500)
+        self.window.set_resizable(False)
+        
+        # Add CSS class
         self.window.get_style_context().add_class('menu-window')
         
         # Connect close events
         self.window.connect("focus-out-event", self.on_focus_out)
         self.window.connect("key-press-event", self.on_key_press)
+        self.window.connect("button-press-event", self.on_button_press)
         
         # Main container
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -163,6 +176,15 @@ class GruvboxMenu:
         
         # Start hardware monitoring
         self.start_hardware_monitoring()
+    
+    def on_button_press(self, widget, event):
+        # Handle clicks outside the menu to close it
+        if event.type == Gdk.EventType.BUTTON_PRESS:
+            allocation = widget.get_allocation()
+            if (event.x < 0 or event.x > allocation.width or 
+                event.y < 0 or event.y > allocation.height):
+                self.hide_menu()
+        return False
         
     def create_top_section(self, parent):
         section_frame = Gtk.Frame()
@@ -263,9 +285,9 @@ class GruvboxMenu:
             ("Screen Record", "media-record", "wf-recorder -g \"$(slurp)\" -f ~/Videos/recording.mp4"),
             ("Screenshots", "folder-pictures", "thunar ~/Pictures"),
             ("Videos", "folder-videos", "thunar ~/Videos"),
-            ("Settings", "preferences-system", ""),
-            ("Power", "system-shutdown", ""),
-            ("Info", "dialog-information", "")
+            ("Settings", "preferences-system", "hyprctl dispatch exec \"gtk-launch org.gnome.Settings\""),
+            ("Power", "system-shutdown", "wlogout"),
+            ("Info", "dialog-information", "neofetch")
         ]
         
         for i, (name, icon, command) in enumerate(tools[:8]):
@@ -341,6 +363,8 @@ class GruvboxMenu:
                         if gpu_result.returncode == 0:
                             gpu_percent = float(gpu_result.stdout.strip())
                             GLib.idle_add(self.update_progress_bar, 'GPU', gpu_percent)
+                        else:
+                            GLib.idle_add(self.update_progress_bar, 'GPU', 0)
                     except:
                         GLib.idle_add(self.update_progress_bar, 'GPU', 0)
                     
@@ -383,7 +407,14 @@ class GruvboxMenu:
             self.position_window()
             self.window.show_all()
             self.window.present()
+            
+            # For Wayland, we need to grab focus after showing
+            GLib.timeout_add(100, self.grab_focus_delayed)
+    
+    def grab_focus_delayed(self):
+        if self.window:
             self.window.grab_focus()
+        return False
     
     def hide_menu(self):
         if self.window:
@@ -405,6 +436,11 @@ class GruvboxMenu:
         self.window.move(x, y)
     
     def on_focus_out(self, widget, event):
+        # Delay hiding to prevent immediate closure
+        GLib.timeout_add(100, self.hide_menu_delayed)
+        return False
+    
+    def hide_menu_delayed(self):
         self.hide_menu()
         return False
     
@@ -414,13 +450,16 @@ class GruvboxMenu:
         return False
     
     def toggle_menu(self):
-        if self.window.get_visible():
+        if self.window and self.window.get_visible():
             self.hide_menu()
         else:
             self.show_menu()
 
 def main():
     import sys
+    
+    # Initialize GTK
+    Gtk.init(sys.argv)
     
     menu = GruvboxMenu()
     
@@ -432,7 +471,8 @@ def main():
     try:
         Gtk.main()
     except KeyboardInterrupt:
-        pass
+        print("\nExiting...")
+        Gtk.main_quit()
 
 if __name__ == "__main__":
     main()
