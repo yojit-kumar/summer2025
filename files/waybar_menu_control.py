@@ -15,9 +15,6 @@ class Menu:
         self.right_section = tk.Frame(self.root, bg="#2a6f5f", width=200, height=200)
         self.right_section.pack(side=tk.LEFT, fill=tk.Y, padx=10, pady=10)
 
-        self.right_section.image = tk.PhotoImage(file="right.png")
-        self.right_section.image = self.right_section.image.subsample(5, 5)
-
         self.top_section = tk.Frame(self.root, bg="#2a6f5f", width=200, height=20)
         self.top_section.pack(side=tk.TOP, fill=tk.X, padx=10, pady=10)
 
