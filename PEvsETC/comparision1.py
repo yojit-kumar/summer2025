@@ -75,11 +75,11 @@ def parameter_sweep(a_values, L, transient, D, t, bins, noise=0.0, verbose=True)
         series = simulate(a, L, transient, noise)
 
         lyapunov.append(lyapunov_exponent(a, L, transient))
-        permutation.append(method1(series, D, t))
-        #etc.append(method2(series, bins=bins))
+        #permutation.append(method1(series, D, t))
+        etc.append(method2(series, bins=bins))
 
-        #permutation.append(method2(series, bins=8))
-        etc.append(method1(series, D+1, t))
+        permutation.append(method2(series, bins=bins+1))
+        #etc.append(method1(series, D+1, t))
 
     if verbose:
         print("100%")
@@ -140,7 +140,7 @@ def correlation(a_values, transient, D, t, bins):
     plt.grid()
     plt.legend()
     
-    plt.savefig(f"l{D}.png")
+    plt.savefig(f"b{bins}.png")
     #plt.show()
 
 
@@ -238,7 +238,7 @@ if __name__=="__main__":
 
     #l, p, e = parameter_sweep(a_values, L, transient, D, t, bins)
     #plotting(a_values, l, p, e)
-    for D in [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]:
+    for bins in [6, 7, 8, 9, 10]:
         correlation(a_values, transient, D, t, bins)
 
     #noise_levels = [0.0, 0.005, 0.01, 0.02, 0.05, 0.1]
