@@ -75,11 +75,11 @@ def parameter_sweep(a_values, L, transient, D, t, bins, noise=0.0, verbose=True)
         series = simulate(a, L, transient, noise)
 
         lyapunov.append(lyapunov_exponent(a, L, transient))
-        #permutation.append(method1(series, D, t))
-        etc.append(method2(series, bins=bins))
+        permutation.append(method1(series, D, t))
+        #etc.append(method2(series, bins=bins))
 
-        permutation.append(method2(series, bins=bins+1))
-        #etc.append(method1(series, D+1, t))
+        #permutation.append(method2(series, bins=bins+1))
+        etc.append(method1(series, D+1, t))
 
     if verbose:
         print("100%")
@@ -112,7 +112,7 @@ def plotting(a_values, lyapunov, permutation, etc):
 
 
 def correlation(a_values, transient, D, t, bins):
-    test_case = np.arange(10000,100000,10000)
+    test_case = np.arange(1000,10000,1000)
     cases = len(test_case)
     case = 1
     print("Progress :\n")
@@ -140,7 +140,7 @@ def correlation(a_values, transient, D, t, bins):
     plt.grid()
     plt.legend()
     
-    plt.savefig(f"b{bins}.png")
+    plt.savefig(f"D{D}.png")
     #plt.show()
 
 
@@ -228,7 +228,7 @@ def gaussian_noise_analysis(a_values, L, transient, D, t, bins, noise_levels):
 
 
 if __name__=="__main__":
-    L = 10000 
+    L = 1000
     transient = 100
     D = 13 
     t = 1 
@@ -238,7 +238,7 @@ if __name__=="__main__":
 
     #l, p, e = parameter_sweep(a_values, L, transient, D, t, bins)
     #plotting(a_values, l, p, e)
-    for bins in [6, 7, 8, 9, 10]:
+    for D in [3, 4, 5, 6, 7, 8]:
         correlation(a_values, transient, D, t, bins)
 
     #noise_levels = [0.0, 0.005, 0.01, 0.02, 0.05, 0.1]
