@@ -1,0 +1,53 @@
+2026-01-23 17:54:06 - INFO - Logging initialized. Writing to console and file.
+2026-01-23 17:54:06 - INFO - ========================================
+2026-01-23 17:54:06 - INFO - STARTING EXPERIMENT
+2026-01-23 17:54:06 - INFO - Target File: logistic_map_100000.h5
+2026-01-23 17:54:06 - INFO - ========================================
+2026-01-23 17:54:06 - INFO - Pre-calculating Lyapunov exponents (Noise Free)...
+2026-01-23 18:23:56 - INFO - [1/5] Processing Noise Level Sigma = 0.0
+2026-01-23 18:23:56 - INFO -      ... Simulating a = 3.5000 (0/500)
+2026-01-23 18:26:37 - INFO -      ... Simulating a = 3.6002 (100/500)
+2026-01-23 18:33:48 - INFO -      ... Simulating a = 3.7004 (200/500)
+2026-01-23 18:45:16 - INFO -      ... Simulating a = 3.8006 (300/500)
+2026-01-23 18:57:00 - INFO -      ... Simulating a = 3.9008 (400/500)
+2026-01-23 19:19:53 - INFO -      Saving Data for noise=0.0 to HDF5...
+2026-01-23 19:19:53 - INFO -      Completed noise=0.0 in 3357.63 seconds
+2026-01-23 19:19:53 - INFO - [2/5] Processing Noise Level Sigma = 0.01
+2026-01-23 19:19:53 - INFO -      ... Simulating a = 3.5000 (0/500)
+2026-01-23 19:23:16 - INFO -      ... Simulating a = 3.6002 (100/500)
+2026-01-23 19:32:20 - INFO -      ... Simulating a = 3.7004 (200/500)
+2026-01-23 19:45:17 - INFO -      ... Simulating a = 3.8006 (300/500)
+2026-01-23 19:58:18 - INFO -      ... Simulating a = 3.9008 (400/500)
+2026-01-23 20:22:27 - INFO -      Saving Data for noise=0.01 to HDF5...
+2026-01-23 20:22:27 - INFO -      Completed noise=0.01 in 3753.98 seconds
+2026-01-23 20:22:27 - INFO - [3/5] Processing Noise Level Sigma = 0.02
+2026-01-23 20:22:27 - INFO -      ... Simulating a = 3.5000 (0/500)
+2026-01-23 20:27:32 - INFO -      ... Simulating a = 3.6002 (100/500)
+2026-01-23 20:38:16 - INFO -      ... Simulating a = 3.7004 (200/500)
+2026-01-23 20:55:22 - INFO -      ... Simulating a = 3.8006 (300/500)
+2026-01-23 21:09:21 - INFO -      ... Simulating a = 3.9008 (400/500)
+2026-01-23 21:34:50 - INFO -      Saving Data for noise=0.02 to HDF5...
+2026-01-23 21:34:50 - INFO -      Completed noise=0.02 in 4343.03 seconds
+2026-01-23 21:34:50 - INFO - [4/5] Processing Noise Level Sigma = 0.05
+2026-01-23 21:34:50 - INFO -      ... Simulating a = 3.5000 (0/500)
+2026-01-23 21:48:49 - INFO -      ... Simulating a = 3.6002 (100/500)
+2026-01-23 22:09:15 - INFO -      ... Simulating a = 3.7004 (200/500)
+2026-01-23 22:34:13 - INFO -      ... Simulating a = 3.8006 (300/500)
+2026-01-23 22:54:11 - INFO -      ... Simulating a = 3.9008 (400/500)
+2026-01-23 23:26:54 - INFO -      Saving Data for noise=0.05 to HDF5...
+2026-01-23 23:26:54 - INFO -      Completed noise=0.05 in 6723.35 seconds
+2026-01-23 23:26:54 - INFO - [5/5] Processing Noise Level Sigma = 0.1
+2026-01-23 23:26:54 - INFO -      ... Simulating a = 3.5000 (0/500)
+2026-01-23 23:49:07 - INFO -      ... Simulating a = 3.6002 (100/500)
+2026-01-24 00:21:44 - INFO -      ... Simulating a = 3.7004 (200/500)
+2026-01-24 01:03:28 - INFO -      ... Simulating a = 3.8006 (300/500)
+2026-01-24 01:37:18 - INFO -      ... Simulating a = 3.9008 (400/500)
+2026-01-24 02:35:08 - INFO -      Saving Data for noise=0.1 to HDF5...
+2026-01-24 02:35:08 - INFO -      Completed noise=0.1 in 11294.13 seconds
+2026-01-24 02:35:08 - INFO - ========================================
+2026-01-24 02:35:08 - INFO - Data saved to logistic_map_100000.h5
+2026-01-24 02:35:08 - INFO - ========================================
+2026-01-24 02:35:08 - INFO - STARTING EXPERIMENT
+2026-01-24 02:35:08 - INFO - Target File: logistic_map_1000000.h5
+2026-01-24 02:35:08 - INFO - ========================================
+2026-01-24 02:35:08 - INFO - Pre-calculating Lyapunov exponents (Noise Free)...
